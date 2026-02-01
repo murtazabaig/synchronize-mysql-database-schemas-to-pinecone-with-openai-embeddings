@@ -1,0 +1,45 @@
+{
+  "id": 11971,
+  "title": "Synchronize MySQL database schemas to Pinecone with OpenAI embeddings",
+  "slug": "synchronize-mysql-database-schemas-to-pinecone-with-openai-embeddings-11971",
+  "description": "This workflow synchronizes MySQL database table schemas with a vector databasein a controlled, idempotent manner.Each database table is indexed as a single vector to preserve complete schemacontext for AI-based retrieval and reasoning.The workflow prevents duplicate vectors and automatically handles schema changesby detecting differences and re-indexing only when required.HOW IT WORKS * The workflow starts with a manual trigger and loads global configuration values. * All database tables are discovered and processed one by one inside a loop. * For each table, a normalized schema representation is generated, and a deterministic hash is calculated. * A metadata table is checked to determine whether a vector already exists for the table. * If a vector exists, the stored schema hash is compared with the current hash to detect schema changes. * When a schema change is detected, the existing vector and metadata are deleted. * The updated table schema is embedded as a single vector (without chunking) and upserted into the vector database. * Vector identifiers and schema hashes are persisted for future executions.SETUP STEPS * Set the MySQL database name using mysql_database_name. * Configure the Pinecone index name using pinecone_index. * Set the vector namespace using vector_namespace. * Configure the Pinecone index host using vector_index_host. * Add your Pinecone API key using pinecone_apikey. * Select the embedding model using embedding_model. * Configure text processing options: * chunk_size * chunk_overlap * Set the metadata table identifier using dataTable_Id. * Save and run the workflow manually to perform the initial schema synchronization.LIMITATIONS * This workflow indexes database table schemas only. Table data (rows) are not embedded or indexed. * Each table is stored as a single vector. Very large or highly complex schemas may approach model token limits depending on the selected embedding model. * Schema changes are detected using a hash-based comparison. Non-structural changes that do not affect the schema representation will not trigger re-indexing.",
+  "metadescription": "Idempotently sync MySQL table schemas to Pinecone—one schema per vector, no duplicates. Auto-detects changes via hashes and re-indexes only when needed.",
+  "summary": "Idempotently sync MySQL table schemas into Pinecone for reliable AI retrieval and reasoning—one complete table schema per vector (no chunking).  \nAuto-discovers tables, normalizes each schema, and computes a deterministic hash to detect real changes.  \nPrevents duplicates by checking a metadata table; on schema changes, deletes old vectors/metadata and re-embeds only what’s needed.  \nUpserts updated vectors and persists vector IDs + schema hashes for fast, repeatable runs.  \nSimple setup via config variables (DB, Pinecone index/host/namespace/API key, embedding model, metadata table).  \nLimits: schemas only (no row data), single-vector size may hit token limits, hash-based detection may miss non-structural tweaks.",
+  "date": "19 Dec 2025",
+  "createdAtRaw": "2025-12-19T19:45:32.461+00:00",
+  "categories": [
+    "Document Extraction",
+    "AI RAG"
+  ],
+  "nodeTypes": [
+    "n8n-nodes-base.if",
+    "n8n-nodes-base.set",
+    "n8n-nodes-base.code",
+    "n8n-nodes-base.mySql",
+    "n8n-nodes-base.dataTable",
+    "n8n-nodes-base.stickyNote",
+    "n8n-nodes-base.httpRequest",
+    "n8n-nodes-base.manualTrigger",
+    "n8n-nodes-base.splitInBatches",
+    "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+    "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+    "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+    "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter"
+  ],
+  "author": {
+    "name": "Chandan Singh",
+    "username": "coolchandan62",
+    "avatar": "https://gravatar.com/avatar/3d26d108e6c02e64ea43fde74008e68fb777514bc93e53592f109ca72c283a48?r=pg&d=retro&size=200",
+    "verified": false
+  },
+  "popularity": 18,
+  "visitors": 25,
+  "inserters": 5,
+  "templateUrl": "https://n8n.io/workflows/11971",
+  "readme": "",
+  "thumbnail": "https://supabase.amastuces.com/storage/v1/object/public/worklowscreenshot/11971-synchronize-mysql-database-schemas-to-pinecone-with-openai-embeddings.webp",
+  "complexityLevel": "advanced",
+  "templateData": null,
+  "price": 0,
+  "referalUrl": null
+}
